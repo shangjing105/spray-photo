@@ -1,0 +1,165 @@
+<#import "macro.html" as m>
+<@m.page_header title='主页' />
+
+    <div class="wrapper wrapper-content gray-bg">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-content">
+                        <h2>添加图片</h2>
+                        <form method="post" class="form-horizontal" action="/admin/addPhoto">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">标题：</label>
+                                <div class="col-sm-6">
+                                    <input type="text" name="title" class="form-control" placeholder="标题,可为空" value="" >
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">描述：</label>
+                                <div class="col-sm-6">
+                                    <input type="text" name="description" class="form-control" placeholder="描述,可为空" value="" >
+
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">是否置顶：</label>
+                                <div class="col-sm-6">
+                                    <label class="checkbox-inline">
+                                        <input type="checkbox" name="placedTop"  value="true">是
+                                    </label>
+                                    <label class="checkbox-inline">
+                                        <input type="checkbox" name="placedTop"  value="false" checked>否
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">是否推荐：</label>
+                                <div class="col-sm-6">
+                                    <label class="checkbox-inline">
+                                        <input type="checkbox" name="recommend"  value="true">是
+                                    </label>
+                                    <label class="checkbox-inline">
+                                        <input type="checkbox" name="recommend"  value="false" checked>否
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">图片：</label>
+                                <div class="col-sm-6">
+                                    <div class="input-group">
+                                        <input type="text" name="link" class="form-control" placeholder="图片" value="" required=""> <span class="input-group-btn">
+                                    <button type="button" class="btn btn-primary" id="uploadLink">上传
+                                        </button> </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">拍摄时间：</label>
+                                <div class="col-sm-6">
+                                    <input type="text" name="createDate" class="form-control layer-date" placeholder="拍摄时间,默认为当前时间" value="" onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})">
+
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <div class="col-sm-4 col-sm-offset-2">
+                                    <button class="btn btn-primary" type="submit">保存内容</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="/static/admin/js/plugins/layer/laydate/laydate.js"></script>
+
+    <div class="modal inmodal" id="myModal" tabindex="-1" role="dialog" aria-hidden="true" >
+        <div class="modal-dialog  modal-sm" >
+            <div class="modal-content animated bounceInRight">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">关闭</span>
+                    </button>
+                    <h5 class="modal-title">上传图片</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="row fileupload-buttonbar">
+                        <div class="thumbnail">
+                            <img id="weixin_show" style="height:180px;margin-top:10px;margin-bottom:8px;"
+                                 src="/static/admin/jquery_fileupload/theDefault.png" data-holder-rendered="true">
+                            <div id="progress" class="progress progress-striped active" role="progressbar" aria-valuemin="10"
+                                 aria-valuemax="100" aria-valuenow="0">
+                                <div id="weixin_progress" class="progress-bar progress-bar-success" style="width:0%;"></div>
+                            </div>
+                            <div class="caption" align="center">
+                                <input type="text" name="imagePath" id="imagePath" class="form-control" required="">
+                                <span id="weixin_upload" class="btn btn-primary fileinput-button">
+                                <span>上传</span>
+                                <input type="file" id="file" name="file" multiple>
+                                </span>
+                                <a id="weixin_cancle" href="javascript:void(0)" class="btn btn-warning" role="button"
+                                   style="display:none">删除</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary" id="modalSumit">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(function () {
+            $("#file").fileupload({
+                url: '/admin/fileUpload',
+                sequentialUploads: true
+            }).bind('fileuploadprogress', function (e, data) {
+                var progress = parseInt(data.loaded / data.total * 100, 10);
+                $("#weixin_progress").css('width', progress + '%');
+                $("#weixin_progress").html(progress + '%');
+            }).bind('fileuploaddone', function (e, data) {
+                if (data.result.state) {
+                    $("#weixin_show").attr("src", data.result.pathImage);
+                    $("#imagePath").val(data.result.pathImage);
+                    $("#weixin_upload").css({display: "none"});
+                    $("#weixin_cancle").css({display: ""});
+                    $('#progress').delay(1000).hide(0);
+                }
+            });
+
+            $("#weixin_cancle").click(function () {
+                $("#weixin_show").attr("src", "/static/admin/jquery_fileupload/theDefault.png");
+                $("#imagePath").val("");
+                $("#weixin_upload").css({display: ""});
+                $("#weixin_cancle").css({display: "none"});
+                $("#weixin_progress").css('width', '0%');
+                $("#weixin_progress").html('');
+                $("#progress").css({display: ""});
+            });
+            $("#uploadLink").click(function () {
+                $('#myModal').modal();
+                $(".modal-backdrop").remove();
+
+                if ($("input[name = 'link']").val() != '') {
+                    $("#weixin_show").attr("src", $("input[name = 'link']").val());
+                    $("#imagePath").val($("input[name = 'link']").val());
+                    $("#weixin_upload").css({display: "none"});
+                    $("#weixin_cancle").css({display: ""});
+                    $('#progress').hide();
+                }
+            });
+
+            $("#modalSumit").click(function () {
+                if ($("#imagePath").val() != '') {
+                    $("input[name = 'link']").val($("#imagePath").val());
+                }
+                $('#myModal').modal('hide');
+            });
+
+        });
+
+    </script>
+
+
+    <@m.page_footer />

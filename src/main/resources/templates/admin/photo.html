@@ -1,0 +1,72 @@
+<#import "macro.html" as m>
+    <@m.page_header title='主页' />
+
+    <div class="wrapper wrapper-content gray-bg">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ibox float-e-margins">
+
+                    <div class="ibox-title">
+                        <h5>我的相册</h5>
+                        <div class="ibox-tools">
+                            <a href="/admin/addPhoto" class="btn btn-primary btn-xs">添加新图片</a>
+                        </div>
+                    </div>
+
+                    <div class="ibox-content">
+
+                        <div class="lightBoxGallery">
+                            <#list photos.content as p>
+                                <a href="${p.link}" title="图片" data-gallery="">
+                                    <img src="${p.link}" width="220" height="200">
+                                </a>
+                                <a href="/admin/delPhoto/${p.id?c}">删除</a>
+                            </#list>
+                            <div id="blueimp-gallery" class="blueimp-gallery">
+                                <div class="slides"></div>
+                                <h3 class="title"></h3>
+                                <a class="prev"><</a>
+                                <a class="next">></a>
+                                <a class="close">×</a>
+                                <a class="play-pause"></a>
+                                <ol class="indicator"></ol>
+                            </div>
+                        </div>
+                        <!--- 分页 -->
+                        <div class="pagination" id="pagination"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <link href="/static/admin/css/plugins/blueimp/css/blueimp-gallery.min.css" rel="stylesheet">
+
+    <script src="/static/admin/js/jqPaginator.js"></script>
+    <script src="/static/admin/js/content.min.js?v=1.0.0"></script>
+    <script src="/static/admin/js/plugins/blueimp/jquery.blueimp-gallery.min.js"></script>
+    <script type="text/javascript" src="http://tajs.qq.com/stats?sId=9051096" charset="UTF-8"></script>
+
+    <script>
+        $(function () {
+            try {
+                $('#pagination').jqPaginator({
+                    totalPages: ${photos.totalPages},
+                    visiblePages: 7,
+                    currentPage: ${photos.number+1},
+                    first: '<li class="first"><a href="javascript:void(0);">首页</a></li>',
+                    prev: '<li class="prev"><a href="javascript:void(0);"><i class="arrow arrow2"></i>上一页</a></li>',
+                    next: '<li class="next"><a href="javascript:void(0);">下一页<i class="arrow arrow3"></i></a></li>',
+                    last: '<li class="last"><a href="javascript:void(0);">末页</a></li>',
+                    page: '<li class="page"><a href="javascript:void(0);">{{page}}</a></li>',
+                    onPageChange: function (num, type) {
+                        if (type == 'change') {
+                            location.href = "/admin/photo?page=" + (num - 1);
+                        }
+                    }
+                });
+            } catch (e) {
+            }
+        });
+    </script>
+
+    <@m.page_footer />
