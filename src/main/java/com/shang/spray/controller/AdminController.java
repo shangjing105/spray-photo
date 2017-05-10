@@ -20,9 +20,11 @@ import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import sun.misc.BASE64Decoder;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Date;
 import java.util.Map;
@@ -162,8 +164,8 @@ public class AdminController extends BaseController{
     }
 
     @ResponseBody
-    @RequestMapping("/admin/fileUpload")
-    public Map<String, Object> fileUpload(@RequestParam("file") MultipartFile file, HttpServletRequest request) {
+    @RequestMapping(value = "/admin/fileUpload", method = RequestMethod.POST)
+    public Map<String, Object> fileUpload(@RequestParam("file") MultipartFile file) {
         Map<String, Object> map = createMap();
         try {
             byte[] bytes = file.getBytes();

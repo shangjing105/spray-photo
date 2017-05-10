@@ -60,7 +60,7 @@
     </div>
 
     <div class="modal inmodal" id="myModal" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog  modal-sm" style="width: 500px">
+        <div class="modal-dialog  modal-lg">
             <div class="modal-content animated bounceInRight">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">关闭</span>
@@ -72,15 +72,11 @@
                         <div class="thumbnail">
                             <img id="weixin_show" style="height:180px;margin-top:10px;margin-bottom:8px;"
                                  src="/static/admin/jquery_fileupload/theDefault.png" data-holder-rendered="true">
-                            <div id="progress" class="progress progress-striped active" role="progressbar" aria-valuemin="10"
-                                 aria-valuemax="100" aria-valuenow="0">
-                                <div id="weixin_progress" class="progress-bar progress-bar-success" style="width:0%;"></div>
-                            </div>
                             <div class="caption" align="center">
                                 <input type="text" name="imagePath" id="imagePath" class="form-control" required="">
                                 <span id="weixin_upload" class="btn btn-primary fileinput-button">
                                 <span>上传</span>
-                                <input type="file" id="file" name="file" multiple>
+                                <input type="file" id="file" name="file" accept="image/*" multiple>
                                 </span>
                                 <a id="weixin_cancle" href="javascript:void(0)" class="btn btn-warning" role="button"
                                    style="display:none">删除</a>
@@ -96,21 +92,28 @@
     </div>
     <script>
         $(function () {
-            $("#file").fileupload({
-                url: '/admin/fileUpload',
-                sequentialUploads: true
-            }).bind('fileuploadprogress', function (e, data) {
-                var progress = parseInt(data.loaded / data.total * 100, 10);
-                $("#weixin_progress").css('width', progress + '%');
-                $("#weixin_progress").html(progress + '%');
-            }).bind('fileuploaddone', function (e, data) {
-                if (data.result.state) {
-                    $("#weixin_show").attr("src", data.result.pathImage);
-                    $("#imagePath").val(data.result.pathImage);
-                    $("#weixin_upload").css({display: "none"});
-                    $("#weixin_cancle").css({display: ""});
-                    $('#progress').delay(1000).hide(0);
-                }
+            $("#file").change(function () {
+                lrz(this.files[0]) .then(function (rst) { // 压缩图片处理成功会执行
+                    //压缩后异步上传
+                    $.ajax({
+                        url : "/admin/fileUpload",
+                        data: rst.formData,
+                        processData: false,
+                        contentType: false,
+                        type: 'POST',
+                        success : function(data) {
+                            if (data.state) {
+                                $("#weixin_show").attr("src", data.pathImage);
+                                $("#imagePath").val(data.pathImage);
+                                $("#weixin_upload").css({display: "none"});
+                                $("#weixin_cancle").css({display: ""});
+                            }
+                        },
+                        error : function(){
+                            alert("上传失败");
+                        }
+                    });
+                });
             });
 
             $("#weixin_cancle").click(function () {
@@ -118,9 +121,6 @@
                 $("#imagePath").val("");
                 $("#weixin_upload").css({display: ""});
                 $("#weixin_cancle").css({display: "none"});
-                $("#weixin_progress").css('width', '0%');
-                $("#weixin_progress").html('');
-                $("#progress").css({display: ""});
             });
             $("#uploadFavicon").click(function () {
                 $('#myModal').modal();
@@ -130,12 +130,10 @@
                     $("#imagePath").val($("input[name = 'favicon']").val());
                     $("#weixin_upload").css({display: "none"});
                     $("#weixin_cancle").css({display: ""});
-                    $('#progress').hide();
                 }
             });
 
             $("#modalSumit").click(function () {
-//                $("#commentForm").validate();
                 if ($("#imagePath").val() != '') {
                     $("input[name = 'favicon']").val($("#imagePath").val());
                 }
