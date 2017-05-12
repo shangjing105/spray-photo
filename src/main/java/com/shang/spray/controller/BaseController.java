@@ -3,6 +3,7 @@ package com.shang.spray.controller;
 import com.shang.spray.entity.User;
 import com.shang.spray.service.ConfigService;
 import com.shang.spray.service.PhotoService;
+import com.shang.spray.service.ThemeService;
 import com.shang.spray.service.UserService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
@@ -31,6 +32,9 @@ public class BaseController {
 
     @Autowired
     protected ConfigService configService;
+
+    @Autowired
+    protected ThemeService themeService;
 
     public HashMap<String,Object> createMap() {
         return new HashMap<String,Object>();

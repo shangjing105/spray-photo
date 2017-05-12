@@ -24,12 +24,13 @@ public class WebController extends BaseController {
     @RequestMapping(value = "", method = RequestMethod.GET)
     public String index(Model model) {
 
-        getPhoto(model, "admin");//默认admin
+        Config config = getPhoto(model, "admin");//默认admin
+        model.addAttribute("config", config);
         model.addAttribute("username", "admin");
-        return "/web/index";
+        return "/web/"+config.getTheme();
     }
 
-    private void getPhoto(Model model, String username) {
+    private Config getPhoto(Model model, String username) {
         User user=userService.findByUsername(username);
         Criteria<Photo> criteria = new Criteria<>();
         criteria.add(Restrictions.eq("userId", user.getId()));
@@ -38,33 +39,16 @@ public class WebController extends BaseController {
 
         Criteria<Config> configCriteria = new Criteria<>();
         configCriteria.add(Restrictions.eq("userId", user.getId()));
-        model.addAttribute("config", configService.findOne(configCriteria));
+        return configService.findOne(configCriteria);
     }
 
     @RequestMapping(value = "/{username}", method = RequestMethod.GET)
     public String username(Model model, @PathVariable String username) {
-        getPhoto(model, username);//默认admin
+        Config config = getPhoto(model, username);
+        model.addAttribute("config", config);
         model.addAttribute("username", username);
-        return "/web/index";
+        return "/web/"+config.getTheme();
     }
 
-    @ResponseBody
-    @RequestMapping(value = "/getPhoto", method = RequestMethod.GET)
-    public List<Photo> getAjaxPhoto(String username, @RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "10") Integer size) {
-        User user=userService.findByUsername(username);
-        Criteria<Photo> criteria = new Criteria<>();
-        criteria.add(Restrictions.eq("userId", user.getId()));
-        Sort sort = new Sort(Sort.Direction.DESC, "placedTop", "recommend", "createDate");
-        Pageable pageable = new PageRequest(page, size, sort);
-        return photoService.findAll(criteria, pageable).getContent();
-    }
 
-//    @RequestMapping(value = "/about", method = RequestMethod.GET)
-//    public String about(Model model) {
-//        User user=userService.findByUsername("admin");
-//        Criteria<Config> configCriteria = new Criteria<>();
-//        configCriteria.add(Restrictions.eq("userId", user.getId()));
-//        model.addAttribute("config", configService.findOne(configCriteria));
-//        return "/web/about";
-//    }
 }

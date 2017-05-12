@@ -112,7 +112,7 @@
     <script>
         $(function () {
             $("#file").change(function () {
-                lrz(this.files[0]) .then(function (rst) { // 压缩图片处理成功会执行
+                lrz(this.files[0],{width:800,quality:0.7}) .then(function (rst) { // 压缩图片处理成功会执行
                     //压缩后异步上传
                     $.ajax({
                         url : "/admin/fileUpload",

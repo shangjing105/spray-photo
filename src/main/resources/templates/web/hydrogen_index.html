@@ -1,0 +1,134 @@
+
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>${config.name}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="${config.description}" />
+    <meta name="keywords" content="${config.keywords}" />
+    <meta name="author" content="FREEHTML5.CO" />
+
+    <!-- Facebook and Twitter integration -->
+    <meta property="og:title" content=""/>
+    <meta property="og:image" content=""/>
+    <meta property="og:url" content=""/>
+    <meta property="og:site_name" content=""/>
+    <meta property="og:description" content=""/>
+    <meta name="twitter:title" content="" />
+    <meta name="twitter:image" content="" />
+    <meta name="twitter:url" content="" />
+    <meta name="twitter:card" content="" />
+
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+    <link rel="shortcut icon" href="${config.favicon}">
+
+    <!-- Google Webfonts -->
+    <link href="/static/web/hydrogen/css/css_roboto.css" >
+    <link href="/static/web/hydrogen/css/css_montserrat.css" >
+
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="/static/web/hydrogen/css/animate.css">
+    <!-- Icomoon Icon Fonts-->
+    <link rel="stylesheet" href="/static/web/hydrogen/css/icomoon.css">
+    <!-- Magnific Popup -->
+    <link rel="stylesheet" href="/static/web/hydrogen/css/magnific-popup.css">
+    <!-- Salvattore -->
+    <link rel="stylesheet" href="/static/web/hydrogen/css/salvattore.css">
+    <!-- Theme Style -->
+    <link rel="stylesheet" href="/static/web/hydrogen/css/style.css">
+
+    <!-- Modernizr JS -->
+    <script src="/static/web/hydrogen/js/modernizr-2.6.2.min.js"></script>
+    <!-- FOR IE9 below -->
+    <!--[if lt IE 9]>
+    <script src="/static/web/hydrogen/js/respond.min.js"></script>
+    <![endif]-->
+    <script src="/static/web/hydrogen/js/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.lazyload/1.9.1/jquery.lazyload.min.js"></script>
+
+</head>
+<body>
+
+<div id="fh5co-offcanvass">
+    <a href="#" class="fh5co-offcanvass-close js-fh5co-offcanvass-close">Menu <i class="icon-cross"></i> </a>
+    <h1 class="fh5co-logo"><a class="navbar-brand" href="/">${config.name}</a></h1>
+    <ul>
+        <li class="active"><a href="/${username}">首页</a></li>
+        <li><a href="/admin/main">管理</a></li>
+    </ul>
+    <h3 class="fh5co-lead">${config.introduce}</h3>
+</div>
+<header id="fh5co-header" role="banner" style="padding-top: 1em;padding-bottom: 0;">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <a href="#" class="fh5co-menu-btn js-fh5co-menu-btn">Menu <i class="icon-menu"></i></a>
+                <a class="navbar-brand" href="/${username}">${config.name}</a>
+            </div>
+        </div>
+    </div>
+</header>
+<!-- END .header -->
+
+<div id="fh5co-main">
+    <div class="container">
+
+        <div class="row" id="content">
+
+            <div id="fh5co-board" data-columns>
+                <#list photos as p>
+                    <div class="item">
+                        <div class="animate-box">
+                            <a href="${p.link!!}" class="image-popup fh5co-board-img" title="${p.title!!}">
+                                <img src="/static/web/loading.gif" class="lazy" data-original="${p.link!!}" alt="${p.title!!}">
+                            </a>
+                        </div>
+                        <#if p.description?? & p.description != ''>
+                            <div class="fh5co-desc" style="padding: 8px;">${p.description!!} </div><br/>
+                        </#if>
+                    </div>
+                </#list>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer id="fh5co-footer" style="padding: 0;">
+
+    <div class="container">
+        <div class="row row-padded">
+            <div class="col-md-12 text-center">
+                <p><small>&copy; 2017 ${config.description}.</small></p>
+            </div>
+        </div>
+    </div>
+</footer>
+<script>
+    $(function () {
+        $("img.lazy").lazyload({
+            threshold : 300,
+            failure_limit : 20
+        });
+    });
+</script>
+
+<!-- jQuery Easing -->
+<script src="/static/web/hydrogen/js/jquery.easing.1.3.js"></script>
+<!-- Bootstrap -->
+<script src="/static/web/hydrogen/js/bootstrap.min.js"></script>
+<!-- Waypoints -->
+<script src="/static/web/hydrogen/js/jquery.waypoints.min.js"></script>
+<!-- Magnific Popup -->
+<script src="/static/web/hydrogen/js/jquery.magnific-popup.min.js"></script>
+<!-- Salvattore -->
+<script src="/static/web/hydrogen/js/salvattore.min.js"></script>
+<!-- Main JS -->
+<script src="/static/web/hydrogen/js/main.js"></script>
+
+</body>
+</html>

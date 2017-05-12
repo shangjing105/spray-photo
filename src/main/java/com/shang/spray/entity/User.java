@@ -1,10 +1,13 @@
 package com.shang.spray.entity;
 
+import org.hibernate.annotations.DynamicUpdate;
+
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 
 @Entity
+@DynamicUpdate
 public class User extends BaseEntity{
 
 

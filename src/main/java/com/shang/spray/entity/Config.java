@@ -1,5 +1,7 @@
 package com.shang.spray.entity;
 
+import org.hibernate.annotations.DynamicUpdate;
+
 import javax.persistence.Entity;
 
 /**
@@ -7,6 +9,7 @@ import javax.persistence.Entity;
  * Created by shang on 2017/4/28.
  */
 @Entity
+@DynamicUpdate
 public class Config extends BaseEntity {
 
     private String name;
@@ -20,6 +23,8 @@ public class Config extends BaseEntity {
     private String introduce;
 
     private Integer userId;
+
+    private String theme;
 
     public String getName() {
         return name;
@@ -67,5 +72,13 @@ public class Config extends BaseEntity {
 
     public void setUserId(Integer userId) {
         this.userId = userId;
+    }
+
+    public String getTheme() {
+        return theme;
+    }
+
+    public void setTheme(String theme) {
+        this.theme = theme;
     }
 }

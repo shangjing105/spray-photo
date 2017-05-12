@@ -1,5 +1,7 @@
 package com.shang.spray.entity;
 
+import org.hibernate.annotations.DynamicUpdate;
+
 import javax.persistence.Entity;
 
 /**
@@ -7,6 +9,7 @@ import javax.persistence.Entity;
  * Created by shang on 2017/4/27.
  */
 @Entity
+@DynamicUpdate
 public class Photo extends BaseEntity {
 
     private String title; //名称

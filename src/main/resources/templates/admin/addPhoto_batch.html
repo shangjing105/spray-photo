@@ -1,0 +1,58 @@
+<#import "macro.html" as m>
+<@m.page_header title='主页' />
+
+    <div class="wrapper wrapper-content gray-bg">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-content">
+                        <form method="post" class="form-horizontal" id="form" action="/admin/addPhotoBatch">
+
+                            <div class="form-group" >
+                                <div class="col-sm-2">
+                                    <span class="btn btn-primary fileinput-button"><span>批量上传图片</span>
+                                 <input type="file" id="file" name="file" accept="image/*" multiple> </span>
+                                </div>
+                                <div class="col-sm-2" style="display: none;" id="submit">
+                                    <button class="btn btn-primary" type="submit">保存内容</button>
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(function () {
+            $("#file").change(function () {
+                for (var i=0; i<this.files.length; i++) {
+                    lrz(this.files[i],{width:800,quality:0.7}) .then(function (rst) { // 压缩图片处理成功会执行
+                        //压缩后异步上传
+                        $.ajax({
+                            url : "/admin/fileUpload",
+                            data: rst.formData,
+                            processData: false,
+                            contentType: false,
+                            type: 'POST',
+                            success : function(data) {
+                                if (data.state) {
+                                    var str = '<div class="form-group"><div class="col-sm-6">' +
+                                              '<input type="text" name="link" class="form-control" value="'+data.pathImage+'" />' +
+                                              '</div></div>';
+                                    $("#form").append(str);
+                                    $("#submit").show();
+                                }
+                            },
+                            error : function(){
+                                alert("上传失败");
+                            }
+                        });
+                    });
+                }
+            });
+
+        });
+    </script>
+    <@m.page_footer />
